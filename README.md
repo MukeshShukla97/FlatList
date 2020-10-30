@@ -12,9 +12,11 @@ Good luck to you!
 
 To get started after cloning this repo, `cd` into the folder and install all dependencies:
 
-```cd HoneycombExample
+```
+cd HoneycombExample
 yarn
-npx pod-install```
+npx pod-install
+```
 
 It's recommended that you install `watchman` too:
 
