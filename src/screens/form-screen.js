@@ -1,26 +1,23 @@
-import { Field, reduxForm } from 'redux-form';
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
-import { SelectionView, SubmitButton } from '../components';
-import { addItem, optionsSelector } from '../store';
+import {Field, reduxForm} from 'redux-form';
+import React, {Component} from 'react';
+import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
+import {SelectionView, SubmitButton} from '../components';
+import {addItem, optionsSelector} from '../store';
 
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
-@connect(
-  (state) => ({
-    initialValues: {
-      selection: 0,
-    },
-    options: optionsSelector(state),
-  })
-)
+@connect((state) => ({
+  initialValues: {
+    selection: state.options[0],
+  },
+  options: optionsSelector(state),
+}))
 @reduxForm({
   form: 'the-form',
-  onSubmit: ({ selection }, dispatch, { navigation }) => {
-    const item = { title: "dummy item" };
-    dispatch(addItem(item));
+  onSubmit: ({selection}, dispatch, {navigation}) => {
+    dispatch(addItem(selection));
     navigation.goBack();
-  }
+  },
 })
 export class FormScreen extends Component {
   constructor(props) {
@@ -28,20 +25,26 @@ export class FormScreen extends Component {
   }
 
   render() {
-    const { handleSubmit } = this.props;
+    const {handleSubmit, options} = this.props;
+    
     return (
       <SafeAreaView>
         <View style={styles.container}>
           <View style={styles.content}>
             <Text style={styles.headerText}>Check this cool form out!</Text>
-            
-            <Field name="selection" component={/* List component should go here */() => <></>} />
+
+            <Field
+              name="selection"
+              component={SelectionView}
+              items={options}
+              style={styles.selectionView}
+            />
 
             <SubmitButton style={styles.submitButton} onPress={handleSubmit} />
           </View>
         </View>
       </SafeAreaView>
-    )
+    );
   }
 }
 
@@ -64,7 +67,7 @@ const styles = StyleSheet.create({
   },
 
   selectionView: {
-    marginTop: 40,
+    marginTop: 20,
   },
 
   submitButton: {
